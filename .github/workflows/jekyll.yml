@@ -13,6 +13,10 @@ jobs:
       commit_message: ${{ github.event.head_commit.message }}
     steps:
     - uses: actions/checkout@v2
+    - name: Checkout CSL styles for conversion
+      run:
+        cd ${{ github.workspace }}
+        git submodule add https://github.com/citation-style-language/styles.git
     - name: Convert from Pandoc-Markdown to GFM
       run: |
         mkdir -p ${{ github.workspace }}/tmp

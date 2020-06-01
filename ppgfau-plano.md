@@ -11,7 +11,7 @@ creator:
   email        : palazzo@unb.br
 keywords       : [Ecletismo, Nacionalismo, História urbana]
 bibliography: bibliography/biblio.bib
-csl            : "lib/styles/chicago-fullnote-bibliography-with-ibid.csl"
+csl            : "styles/chicago-fullnote-bibliography-with-ibid.csl"
 lang           : pt-BR
 source         : 23106.067490/2018-89
 suppress-bibliography: true
