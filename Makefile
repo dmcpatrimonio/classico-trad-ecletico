@@ -61,55 +61,7 @@ fig/%.png : %.svg
 
 # Install and cleanup {{{1
 # ===================
-.PHONY : setup link-template makedirs submodule_init virtualenv clean
-
-# CI/CD scripts {{{2
-# -------------
-setup : makedirs submodule_init lib virtualenv bundle license
-
-makedirs :
-	# This is for the publish recipe (the default when calling 'make' with
-	# no arguments) to access binary files stored outside version control.
-	# Uncomment the lines below to use default settings for local builds
-	# only. When creating a CI script, provide a connection your CDN or
-	# other file server accessible from the internet.
-	#ln -s $(SHARE)/_book _book
-	#ln -s $(SHARE)/_share _share
-	#ln -s $(SHARE)/fig fig
-	#ln -s $(SHARE)/assets assets
-
-submodule_init : link-template
-	git checkout template
-	git pull
-	-git submodule init
-	git submodule update
-	git checkout -
-	git merge template --allow-unrelated-histories
-
-lib :   .install/git/modules/lib/styles/info/sparse-checkout \
-	.install/git/modules/lib/pandoc-templates/info/sparse-checkout
-	rsync -aq .install/git/ .git/
-	cd lib/styles && git config core.sparsecheckout true && \
-		git checkout master && git pull && \
-		git read-tree -m -u HEAD
-	cd lib/pandoc-templates && git config core.sparsecheckout true \
-		&& git checkout master && git pull && \
-		git read-tree -m -u HEAD
-
-virtualenv :
-	# Mac/Homebrew Python requires the recipe below to be instead:
-	# python3 -m virtualenv ...
-	# pip3 instal ...
-	python -m venv .venv && source .venv/bin/activate && \
-		pip install -r .install/requirements.txt
-	-rm -rf src
-
-bundle : Gemfile
-	bundle install
-
-# New repo from template {{{2
-# ----------------------
-# Recipes to use when starting a new repository from the template.
+.PHONY : link-template license clean
 
 link-template :
 	# Generating a repo from a GitHub template breaks the
@@ -125,13 +77,13 @@ link-template :
 
 license :
 	source .venv/bin/activate && \
-		lice --header cc_by_sa >> README.md && \
-		lice cc_by_sa -f LICENSE
+		lice --header cc_by >> README.md && \
+		lice cc_by -f LICENSE
 
 # `make clean` will clear out a few standard folders where only compiled
 # files should be. Anything you might have placed manually in them will
 # also be deleted!
 clean :
-	-rm -rf _site *.tmp
+	-rm -rf _site tmp
 
 # vim: set foldmethod=marker tw=72 :
