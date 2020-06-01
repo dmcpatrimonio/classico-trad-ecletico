@@ -20,25 +20,17 @@ publish : setup _site/index.html  _book/6enanparq.docx
 # Jekyll {{{2
 # ------
 PAGES_SRC  = $(wildcard *.md)
-PAGES_OUT := $(patsubst %,docs/%, $(PAGES_SRC))
-DOCS       = $(wildcard docs/*.md)
-SITE      := $(patsubst docs/%.md,_site/%/index.html, $(DOCS))
+PAGES_OUT := $(patsubst %,tmp/%, $(PAGES_SRC))
 
 serve : _site/.nojekyll
 	bundle exec jekyll serve 2>&1 | egrep -v 'deprecated|obsoleta'
 
-_site/.nojekyll : $(DOCS) docs/_config.yml
-	bundle exec jekyll build 2>&1 | egrep -v 'deprecated|obsoleta'
-	touch _site/.nojekyll
-
-_site/%/index.html : docs/%.md docs/_config.yml
+build: $(PAGES_OUT)
 	bundle exec jekyll build 2>&1 | egrep -v 'deprecated|obsoleta'
 
-docs/_config.yml : _config.yml
-	rsync _config.yml docs/_config.yml
-
-docs/%.md : %.md jekyll.yaml lib/templates/default.jekyll
-	source .venv/bin/activate; pandoc -o $@ -d spec/jekyll.yaml $<
+tmp/%.md : %.md jekyll.yaml lib/templates/default.jekyll
+	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
+		pandoc/core:2.9.2.1 $< -o $@ -d spec/jekyll.yaml
 
 # VI Enanparq {{{2
 # -----------

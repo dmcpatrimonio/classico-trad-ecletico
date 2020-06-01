@@ -1,21 +1,71 @@
-name: Jekyll site CI
+name: Website
 
 on: 
   push:
     branches:
       - master
-      - dev
+    pull_request:
 
 jobs:
-  build:
-
+  pandoc:
     runs-on: ubuntu-latest
-
+    env:
+      commit_message: ${{ github.event.head_commit.message }}
     steps:
-    - name: Clone branch
+    - uses: actions/checkout@v2
+    - name: Convert from Pandoc-Markdown to GFM
+      run: |
+        mkdir -p ${{ github.workspace }}/tmp
+        make build
+    - name: Upload web pages
+      uses: actions/upload-artifact@v2
+      with:
+        name: pages
+        path: 'tmp/*.md'
+  build:
+    runs-on: ubuntu-latest
+    needs: pandoc
+    steps:
+    - name: Checkout gh-pages branch
       uses: actions/checkout@v2
-    - name: Build the site in the jekyll/builder container
+      with:
+        ref : 'gh-pages'
+    - name: Merge changes from active branch
+      run: |
+        git merge ${{ env.GITHUB_REF }}
+    - name: Update pages
+      uses: actions/download-artifact@v2
+      with:
+        name: pages
+        path: ${{ github.workspace }}/
+    - name: Test Jekyll site build
       run: |
         docker run \
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
         jekyll/builder:3.8.5 /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
+  gh-pages:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.repository == 'dmcpatrimonio/arqtrad'
+    steps:
+    - name: Checkout gh-pages branch
+      uses: actions/checkout@v2
+      with:
+        ref : 'gh-pages'
+    - name: Merge changes from active branch
+      run: |
+        git merge ${{ env.GITHUB_REF }}
+    - name: Update pages
+      uses: actions/download-artifact@v2
+      with:
+        name: pages
+        path: ${{ github.workspace }}/
+    - name: Commit changes to gh-pages branch
+      run: |
+        cd ${{ github.workspace }}
+        git config --local user.email "runner@github.com"
+        git config --local user.name  "Automated build"
+        git add .
+        git commit -m "${{ env.commit_message }}" -a
+        git pull
+        git status

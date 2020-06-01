@@ -2,7 +2,7 @@
 title: "Clássico, tradicional, eclético: Arquitetura brasileira no longo século XIX"
 ---
 
-![](https://github.com/dmcpatrimonio/arqtrad/workflows/Jekyll%20site%20CI/badge.svg?branch=master)
+![Website](https://github.com/dmcpatrimonio/arqtrad/workflows/Website/badge.svg?branch=master)
 
 Este projeto de pesquisa versa sobre a produção arquitetônica e
 urbanística de 1780 a 1930, com ênfase na formação dos campos de
