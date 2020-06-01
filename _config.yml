@@ -83,7 +83,6 @@ defaults: # {{{2
       itemtype  : "http://schema.org/Thing"
 
 # Build settings {{{1
-source: docs/
 remote_theme: p3palazzo/minima-scholar # {{{2
 minima:
   date_format : "%e %B %Y"
