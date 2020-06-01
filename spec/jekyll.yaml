@@ -1,4 +1,4 @@
-to        : gfm-citations
+to        : gfm
 standalone: true
 #template  : 'lib/templates/default.jekyll'
 filters:
