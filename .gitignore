@@ -6,6 +6,7 @@
 # and R. As a bonus, there are some standard ignore patterns for Windows
 # and Mac.
 
+session.vim
 # Generated binary files (PDF, Word, etc.) go here {{{1
 ## Book build output
 _book
