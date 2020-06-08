@@ -20,7 +20,7 @@ build: $(PAGES_OUT)
 
 tmp/%.md : %.md jekyll.yaml lib/templates/default.jekyll
 	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
-		pandoc/core:2.9.2.1 $< -o $@ -d spec/jekyll.yaml
+		palazzo/pandoc-xnos:2.9.2.1 $< -o $@ -d spec/jekyll.yaml
 
 # VI Enanparq {{{2
 # -----------
@@ -33,15 +33,16 @@ _book/6enanparq.docx : _book/6enanparq.odt
 
 _book/6enanparq.odt : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
 	6enanparq-metadata.yaml default.opendocument reference.odt
-	source .venv/bin/activate; \
-	pandoc -o $@ -d spec/6enanparq-sl.yaml \
+	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
+		palazzo/pandoc-xnos:2.9.2.1 \
+		-o $@ -d spec/6enanparq-sl.yaml \
 		6enanparq-intro.md 6enanparq-palazzo.tmp \
 		6enanparq-florentino.tmp 6enanparq-gil_cornet.tmp \
 		6enanparq-tinoco.tmp 6enanparq-metadata.yaml
 
 %.tmp : %.md concat.yaml biblio.bib
-	source .venv/bin/activate; \
-	pandoc -o $@ -d spec/concat.yaml $<
+	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
+		palazzo/pandoc-xnos:2.9.2.1 -o $@ -d spec/concat.yaml $<
 
 # Figuras a partir de vetores {{{2
 # ---------------------------
