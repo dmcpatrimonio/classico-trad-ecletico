@@ -2,28 +2,18 @@
 # ================
 # Where make should look for things
 VPATH = lib
-vpath %.csl lib/styles
-vpath %.yaml .:spec:docs/_data
-vpath default.% lib/templates:lib/pandoc-templates
-vpath reference.% lib/templates:lib/pandoc-templates
-# Edit the path below to point to the location of your binary files.
-SHARE = ~/integra/arqtrad
+vpath %.csl styles
+vpath %.yaml .:spec:_data
+vpath default.% lib:lib/templates:lib/pandoc-templates
+vpath reference.% lib:lib/templates:lib/pandoc-templates
 
 # Branch-specific targets and recipes {{{1
 # ===================================
-
-# This is the first recipe in the Makefile. As such, it is the one that
-# runs when calling 'make' with no arguments. List as its requirements
-# anything you want to build (deploy) for release.
-publish : setup _site/index.html  _book/6enanparq.docx
 
 # Jekyll {{{2
 # ------
 PAGES_SRC  = $(wildcard *.md)
 PAGES_OUT := $(patsubst %,tmp/%, $(PAGES_SRC))
-
-serve : _site/.nojekyll
-	bundle exec jekyll serve 2>&1 | egrep -v 'deprecated|obsoleta'
 
 build: $(PAGES_OUT)
 	bundle exec jekyll build 2>&1 | egrep -v 'deprecated|obsoleta'
@@ -56,60 +46,15 @@ _book/6enanparq.odt : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
 # Figuras a partir de vetores {{{2
 # ---------------------------
 
-fig/%.png : %.svg
+figures/%.png : %.svg
 	inkscape -f $< -e $@ -d 96
 
 # Install and cleanup {{{1
 # ===================
-.PHONY : setup link-template makedirs submodule_init virtualenv clean
+.PHONY : serve link-template license clean
 
-# CI/CD scripts {{{2
-# -------------
-setup : makedirs submodule_init lib virtualenv bundle license
-
-makedirs :
-	# This is for the publish recipe (the default when calling 'make' with
-	# no arguments) to access binary files stored outside version control.
-	# Uncomment the lines below to use default settings for local builds
-	# only. When creating a CI script, provide a connection your CDN or
-	# other file server accessible from the internet.
-	#ln -s $(SHARE)/_book _book
-	#ln -s $(SHARE)/_share _share
-	#ln -s $(SHARE)/fig fig
-	#ln -s $(SHARE)/assets assets
-
-submodule_init : link-template
-	git checkout template
-	git pull
-	-git submodule init
-	git submodule update
-	git checkout -
-	git merge template --allow-unrelated-histories
-
-lib :   .install/git/modules/lib/styles/info/sparse-checkout \
-	.install/git/modules/lib/pandoc-templates/info/sparse-checkout
-	rsync -aq .install/git/ .git/
-	cd lib/styles && git config core.sparsecheckout true && \
-		git checkout master && git pull && \
-		git read-tree -m -u HEAD
-	cd lib/pandoc-templates && git config core.sparsecheckout true \
-		&& git checkout master && git pull && \
-		git read-tree -m -u HEAD
-
-virtualenv :
-	# Mac/Homebrew Python requires the recipe below to be instead:
-	# python3 -m virtualenv ...
-	# pip3 instal ...
-	python -m venv .venv && source .venv/bin/activate && \
-		pip install -r .install/requirements.txt
-	-rm -rf src
-
-bundle : Gemfile
-	bundle install
-
-# New repo from template {{{2
-# ----------------------
-# Recipes to use when starting a new repository from the template.
+serve : 
+	bundle exec jekyll serve 2>&1 | egrep -v 'deprecated|obsoleta'
 
 link-template :
 	# Generating a repo from a GitHub template breaks the
@@ -125,13 +70,13 @@ link-template :
 
 license :
 	source .venv/bin/activate && \
-		lice --header cc_by_sa >> README.md && \
-		lice cc_by_sa -f LICENSE
+		lice --header cc_by >> README.md && \
+		lice cc_by -f LICENSE
 
 # `make clean` will clear out a few standard folders where only compiled
 # files should be. Anything you might have placed manually in them will
 # also be deleted!
 clean :
-	-rm -rf _site *.tmp
+	-rm -rf _site tmp
 
 # vim: set foldmethod=marker tw=72 :

@@ -46,17 +46,18 @@ jobs:
         -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
         jekyll/builder:3.8.5 /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
   gh-pages:
-    env:
-      commit_message: ${{ github.event.head_commit.message }}
     runs-on: ubuntu-latest
     needs: build
     if: github.event_name == 'push' && github.repository == 'dmcpatrimonio/arqtrad'
+    env:
+      commit_message: ${{ github.event.head_commit.message }}
     steps:
     - name: Checkout gh-pages branch
       uses: actions/checkout@v2
       with:
         ref : 'gh-pages'
-    - name: Merge changes from active branch
+        fetch-depth: 0
+    - name: Merge changes from master branch
       run: |
         git fetch --all
         git merge origin/master
@@ -71,6 +72,6 @@ jobs:
         git config --local user.email "runner@github.com"
         git config --local user.name  "Automated build"
         git add .
-        git commit -m "${{ env.commit_message }}" -a
+        git commit -m "${{ env.commit_message }}" -a || git status
         git pull
         git push
