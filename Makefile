@@ -2,6 +2,7 @@
 # ================
 # Where make should look for things
 VPATH = lib
+vpath %.bib .:bibliography
 vpath %.csl styles
 vpath %.yaml .:spec:_data
 vpath default.% lib:lib/templates:lib/pandoc-templates
@@ -28,10 +29,11 @@ ENANPARQ_SRC  = $(wildcard 6enanparq-*.md)
 ENANPARQ_TMP := $(patsubst %.md,%.tmp, $(ENANPARQ_SRC))
 .INTERMEDIATE : $(ENANPARQ_TMP) _book/6enanparq.odt
 
-_book/6enanparq.docx : _book/6enanparq.odt
-	libreoffice --invisible --convert-to docx --outdir _book $<
+6enanparq.docx : 6enanparq.odt
+	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
+		woahbase/alpine-libreoffice:x86_64 --convert-to docx $<
 
-_book/6enanparq.odt : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
+6enanparq.odt : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
 	6enanparq-metadata.yaml default.opendocument reference.odt
 	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
 		palazzo/pandoc-xnos:2.9.2.1 \
