@@ -30,7 +30,7 @@ ENANPARQ_TMP := $(patsubst %.md,%.tmp, $(ENANPARQ_SRC))
 .INTERMEDIATE : $(ENANPARQ_TMP) _book/6enanparq.odt
 
 6enanparq.docx : 6enanparq.odt
-	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
+	docker run --rm -v "`pwd`:/home/alpine" \
 		woahbase/alpine-libreoffice:x86_64 --convert-to docx $<
 
 6enanparq.odt : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
