@@ -2,6 +2,7 @@
 # ================
 # Where make should look for things
 VPATH = lib
+vpath %.bib .:bibliography
 vpath %.csl styles
 vpath %.yaml .:spec:_data
 vpath default.% lib:lib/templates:lib/pandoc-templates
@@ -20,7 +21,7 @@ build: $(PAGES_OUT)
 
 tmp/%.md : %.md jekyll.yaml lib/templates/default.jekyll
 	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
-		pandoc/core:2.9.2.1 $< -o $@ -d spec/jekyll.yaml
+		palazzo/pandoc-xnos:2.9.2.1 $< -o $@ -d spec/jekyll.yaml
 
 # VI Enanparq {{{2
 # -----------
@@ -28,20 +29,22 @@ ENANPARQ_SRC  = $(wildcard 6enanparq-*.md)
 ENANPARQ_TMP := $(patsubst %.md,%.tmp, $(ENANPARQ_SRC))
 .INTERMEDIATE : $(ENANPARQ_TMP) _book/6enanparq.odt
 
-_book/6enanparq.docx : _book/6enanparq.odt
-	libreoffice --invisible --convert-to docx --outdir _book $<
+6enanparq.docx : 6enanparq.odt
+	docker run --rm -v "`pwd`:/home/alpine" -v assets/fonts:/usr/share/fonts:ro \
+		woahbase/alpine-libreoffice:x86_64 --convert-to docx $<
 
-_book/6enanparq.odt : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
+6enanparq.odt : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
 	6enanparq-metadata.yaml default.opendocument reference.odt
-	source .venv/bin/activate; \
-	pandoc -o $@ -d spec/6enanparq-sl.yaml \
+	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
+		palazzo/pandoc-xnos:2.9.2.1 \
+		-o $@ -d spec/6enanparq-sl.yaml \
 		6enanparq-intro.md 6enanparq-palazzo.tmp \
 		6enanparq-florentino.tmp 6enanparq-gil_cornet.tmp \
 		6enanparq-tinoco.tmp 6enanparq-metadata.yaml
 
 %.tmp : %.md concat.yaml biblio.bib
-	source .venv/bin/activate; \
-	pandoc -o $@ -d spec/concat.yaml $<
+	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
+		palazzo/pandoc-xnos:2.9.2.1 -o $@ -d spec/concat.yaml $<
 
 # Figuras a partir de vetores {{{2
 # ---------------------------
@@ -53,7 +56,7 @@ figures/%.png : %.svg
 # ===================
 .PHONY : serve link-template license clean
 
-serve : _site/.nojekyll
+serve : 
 	bundle exec jekyll serve 2>&1 | egrep -v 'deprecated|obsoleta'
 
 link-template :

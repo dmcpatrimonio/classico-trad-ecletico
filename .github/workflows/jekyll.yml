@@ -59,6 +59,7 @@ jobs:
         fetch-depth: 0
     - name: Merge changes from master branch
       run: |
+        git fetch --all
         git merge origin/master
     - name: Update pages
       uses: actions/download-artifact@v2
@@ -73,3 +74,4 @@ jobs:
         git add .
         git commit -m "${{ env.commit_message }}" -a || git status
         git pull
+        git push
