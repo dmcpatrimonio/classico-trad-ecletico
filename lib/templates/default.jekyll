@@ -36,14 +36,6 @@ $for(include-before)$
 $include-before$
 
 $endfor$
-$if(title)$
-# $title$
-
-$endif$
-$if(subtitle)$
-<p class="subtitle">$subtitle$</p>
-
-$endif$
 $if(toc)$
 $table-of-contents$
 
