@@ -59,6 +59,8 @@ jobs:
         fetch-depth: 0
     - name: Merge changes from master branch
       run: |
+        git config --local user.email "runner@github.com"
+        git config --local user.name  "$GITHUB_ACTOR"
         git fetch --all
         git merge origin/master
     - name: Update pages
@@ -70,7 +72,7 @@ jobs:
       run: |
         cd ${{ github.workspace }}
         git config --local user.email "runner@github.com"
-        git config --local user.name  "Automated build"
+        git config --local user.name  "$GITHUB_ACTOR"
         git add .
         git commit -m "${{ env.commit_message }}" -a || git status
         git pull

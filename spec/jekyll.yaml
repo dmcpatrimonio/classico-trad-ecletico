@@ -1,8 +1,8 @@
 to        : gfm
 standalone: true
-#template  : 'lib/templates/default.jekyll'
+template  : 'lib/templates/default.jekyll'
 filters:
-#- pandoc-xnos
+- pandoc-xnos
 - pandoc-citeproc
 fail-if-warnings        : true
 file-scope              : true
