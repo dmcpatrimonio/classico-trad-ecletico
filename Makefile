@@ -13,73 +13,46 @@ vpath reference.% lib:lib/templates:lib/pandoc-templates
 
 # Jekyll {{{2
 # ------
-PAGES_SRC  = $(wildcard *.md)
-PAGES_OUT := $(patsubst %,tmp/%, $(PAGES_SRC))
+PAGES_SRC  = $(filter-out README.md,$(wildcard *.md))
+PAGES_OUT := $(patsubst %.md,tmp/%.md, $(PAGES_SRC))
 
-build: $(PAGES_OUT)
-	bundle exec jekyll build 2>&1 | egrep -v 'deprecated|obsoleta'
+build :
+	docker run --rm -v "`pwd`:/srv/jekyll" jekyll/jekyll:3.8.5 \
+		/bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
 
-tmp/%.md : %.md %.bib jekyll.yaml default.jekyll
+pandoc : $(PAGES_OUT)
+	@-rm -rf styles
+
+tmp/%.md : %.md jekyll.yaml default.jekyll
+	@test -e tmp || mkdir tmp
+	@test -e styles || git clone https://github.com/citation-style-language/styles.git
 	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
-		palazzo/pandoc-xnos:2.9.2.1 $< -o $@ -d spec/jekyll.yaml
+		palazzo/pandoc-crossref:2.9.2.1 $< -o $@ -d spec/jekyll.yaml
 
 # VI Enanparq {{{2
 # -----------
 ENANPARQ_SRC  = $(wildcard 6enanparq-*.md)
 ENANPARQ_TMP := $(patsubst %.md,%.tmp, $(ENANPARQ_SRC))
-.INTERMEDIATE : $(ENANPARQ_TMP) _book/6enanparq.odt
 
-6enanparq.docx : 6enanparq.odt
-	docker run --rm -v "`pwd`:/home/alpine" -v assets/fonts:/usr/share/fonts:ro \
-		woahbase/alpine-libreoffice:x86_64 --convert-to docx $<
-
-6enanparq.odt : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
+6enanparq.docx : $(ENANPARQ_TMP) 6enanparq-sl.yaml \
 	6enanparq-metadata.yaml default.opendocument reference.odt
 	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
-		palazzo/pandoc-xnos:2.9.2.1 \
-		-o $@ -d spec/6enanparq-sl.yaml \
+		palazzo/pandoc-crossref:2.9.2.1 \
+		-o 6enanparq.odt -d spec/6enanparq-sl.yaml \
 		6enanparq-intro.md 6enanparq-palazzo.tmp \
 		6enanparq-florentino.tmp 6enanparq-gil_cornet.tmp \
 		6enanparq-tinoco.tmp 6enanparq-metadata.yaml
+	docker run --rm -v "`pwd`:/home/alpine" -v assets/fonts:/usr/share/fonts:ro \
+		woahbase/alpine-libreoffice:x86_64 --convert-to docx 6enanparq.odt
 
 %.tmp : %.md concat.yaml biblio.bib
 	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
-		palazzo/pandoc-xnos:2.9.2.1 -o $@ -d spec/concat.yaml $<
+		palazzo/pandoc-crossref:2.9.2.1 -o $@ -d spec/concat.yaml $<
 
 # Figuras a partir de vetores {{{2
 # ---------------------------
 
 figures/%.png : %.svg
 	inkscape -f $< -e $@ -d 96
-
-# Install and cleanup {{{1
-# ===================
-.PHONY : serve link-template license clean
-
-serve : 
-	bundle exec jekyll serve 2>&1 | egrep -v 'deprecated|obsoleta'
-
-link-template :
-	# Generating a repo from a GitHub template breaks the
-	# submodules. As a workaround, we create a branch that clones
-	# directly from the template repo, activate the submodules
-	# there, then merge it into whatever branch was previously
-	# active (the master branch if your repo has just been
-	# initialized).
-	-git remote add template git@github.com:p3palazzo/research_template.git
-	git fetch template
-	git checkout -B template --track template/master
-	git checkout -
-
-license :
-	source .venv/bin/activate && \
-		lice --header cc_by >> README.md && \
-		lice cc_by -f LICENSE
-
-# `make clean` will clear out a few standard folders where only compiled
-# files should be. Anything you might have placed manually in them will
-# also be deleted!
-clean :
-	-rm -rf _site tmp
 
 # vim: set foldmethod=marker tw=72 :
