@@ -16,7 +16,7 @@ vpath reference.% lib:lib/templates:lib/pandoc-templates
 PAGES_SRC  = $(filter-out README.md,$(wildcard *.md))
 PAGES_OUT := $(patsubst %.md,tmp/%.md, $(PAGES_SRC))
 
-build : $(PAGES_OUT)
+build :
 	docker run --rm -v "`pwd`:/srv/jekyll" jekyll/jekyll:3.8.5 \
 		/bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
 
