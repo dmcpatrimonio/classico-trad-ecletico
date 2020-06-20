@@ -7,6 +7,7 @@ filters:
 fail-if-warnings        : true
 file-scope              : true
 email-obfuscation       : references
+wrap                    : preserve
 resource-path:
 - .
 - fig
