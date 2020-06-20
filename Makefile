@@ -13,11 +13,15 @@ vpath reference.% lib:lib/templates:lib/pandoc-templates
 
 # Jekyll {{{2
 # ------
-PAGES_SRC  = $(wildcard *.md)
-PAGES_OUT := $(patsubst %,tmp/%, $(PAGES_SRC))
+PAGES_SRC  = $(filter-out README.md,$(wildcard *.md))
+PAGES_OUT := $(patsubst %.md,tmp/%.md, $(PAGES_SRC))
 
-build: $(PAGES_OUT)
-	bundle exec jekyll build 2>&1 | egrep -v 'deprecated|obsoleta'
+build : $(PAGES_OUT)
+	docker run --rm -v "`pwd`:/srv/jekyll" jekyll/jekyll:3.8.5 \
+		/bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
+
+pandoc : $(PAGES_OUT)
+	@-rm -rf styles
 
 tmp/%.md : %.md %.bib jekyll.yaml default.jekyll
 	@test -e tmp || mkdir tmp

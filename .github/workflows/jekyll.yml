@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Convert from Pandoc-Markdown to GFM
-      run: make build
+      run: make pandoc
     - name: Upload web pages
       uses: actions/upload-artifact@v2
       with:
@@ -36,10 +36,7 @@ jobs:
         name: pages
         path: ${{ github.workspace }}/
     - name: Test Jekyll site build
-      run: |
-        docker run \
-        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/builder:3.8.5 /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
+      run: make build
   gh-pages:
     runs-on: ubuntu-latest
     needs: build
