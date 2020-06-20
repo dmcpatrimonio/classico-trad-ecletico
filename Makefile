@@ -19,7 +19,7 @@ PAGES_OUT := $(patsubst %,tmp/%, $(PAGES_SRC))
 build: $(PAGES_OUT)
 	bundle exec jekyll build 2>&1 | egrep -v 'deprecated|obsoleta'
 
-tmp/%.md : %.md jekyll.yaml lib/templates/default.jekyll
+tmp/%.md : %.md %.bib jekyll.yaml default.jekyll
 	docker run --rm -v "`pwd`:/data" --user `id -u`:`id -g` \
 		palazzo/pandoc-xnos:2.9.2.1 $< -o $@ -d spec/jekyll.yaml
 
