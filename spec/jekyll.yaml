@@ -2,7 +2,7 @@ to        : gfm
 standalone: true
 template  : 'lib/templates/default.jekyll'
 filters:
-- pandoc-xnos
+- pandoc-crossref
 - pandoc-citeproc
 fail-if-warnings        : true
 file-scope              : true
