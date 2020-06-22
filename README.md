@@ -1,6 +1,6 @@
----
-title: "Clássico, tradicional, eclético: Arquitetura brasileira no longo século XIX"
----
+# Clássico, tradicional, eclético
+
+## Cosmopolitismo e nacionalismo na cidade industrial
 
 ![Website](https://github.com/dmcpatrimonio/arqtrad/workflows/Website/badge.svg?branch=master)
 
@@ -66,9 +66,9 @@ discussões verdadeiramente públicas.
 
 * * *
 
-Classicismo, tradicionalismo, ecletismo (c) 2020 by Pedro P. Palazzo
+Clássico, tradicional, eclético (c) 2020 by Pedro P. Palazzo
 
-Classicismo, tradicionalismo, ecletismo is licensed under a
+Clássico, tradicional, eclético is licensed under a
 Creative Commons Attribution-ShareAlike 3.0 Unported License.
 
 You should have received a copy of the license along with this
