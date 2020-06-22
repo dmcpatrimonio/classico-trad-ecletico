@@ -23,7 +23,7 @@ build :
 pandoc : $(PAGES_OUT)
 	@-rm -rf styles
 
-tmp/%.md : %.md jekyll.yaml default.jekyll
+tmp/%.md : %.md %.bib jekyll.yaml default.jekyll
 	@test -e tmp || mkdir tmp
 	@test -e styles || git clone https://github.com/citation-style-language/styles.git
 	docker run -v "`pwd`:/data" --user `id -u`:`id -g` \
