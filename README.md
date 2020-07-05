@@ -4,6 +4,20 @@
 
 ![Website](https://github.com/dmcpatrimonio/arqtrad/workflows/Website/badge.svg?branch=master)
 
+## Sumário
+
+- Planejamento da pesquisa
+  - [Projeto de pesquisa completo](ppgfau-projeto.md)
+  - [Plano de trabalho 2018--2023](ppgfau-plano.md)
+  - [Iniciação científica 2020--2021](pibic21-projeto.md)
+- Temas e produção
+  - [Arquitetura tradicional na contemporaneidade](6enanparq-intro.md)
+  - [Literary History as a Model for Architectural Traditionalism](https://github.com/dmcpatrimonio/archlit)
+  - [Neoárabe: caminhos da arquitetura árabe no Brasil](https://neoarabe.hcommons.org)
+  - [Regionalismo e crítica](https://github.com/dmcpatrimonio/regionalcrit)
+
+## Resumo do projeto de pesquisa
+
 Este projeto de pesquisa versa sobre a produção arquitetônica e
 urbanística de 1780 a 1930, com ênfase na formação dos campos de
 conhecimento brasileiros compreendidos em suas relações internacionais,
@@ -62,7 +76,6 @@ documental vinculado ao tema. Em que pese a relevância de eventuais
 documentos textuais ou gráficos inéditos, o material publicado e as
 obras construídas apresentam maior relevância por comporem o contexto de
 discussões verdadeiramente públicas.
-
 
 * * *
 
