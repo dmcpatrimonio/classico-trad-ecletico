@@ -10,7 +10,7 @@ vpath reference.% lib:lib/templates:lib/pandoc-templates
 PANDOC/CROSSREF := pandoc/crossref:2.11.2
 PANDOC/LATEX    := pandoc/latex:2.11.2
 
-PAGES_SRC  = $(filter-out README.md,$(wildcard *.md))
+PAGES_SRC  = $(wildcard *.md))
 PAGES_OUT := $(patsubst %.md,tmp/%.md, $(PAGES_SRC))
 
 build :
