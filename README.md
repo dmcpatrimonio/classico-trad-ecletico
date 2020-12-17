@@ -9,12 +9,12 @@
 - Planejamento da pesquisa
   - [Projeto de pesquisa completo](ppgfau-projeto.md)
   - [Plano de trabalho 2018--2023](ppgfau-plano.md)
-  - [Iniciação científica 2020--2021](pibic21-projeto.md)
+  - [Iniciação científica 2020--2021](https://dmcpatrimonio.github.io/classico-trad-ecletico-pibic21)
 - Temas e produção
-  - [Arquitetura tradicional na contemporaneidade](6enanparq-intro.md)
-  - [Literary History as a Model for Architectural Traditionalism](https://github.com/dmcpatrimonio/archlit)
+  - [Arquitetura tradicional na contemporaneidade](https://dmcpatrimonio.github.io/6enanparq)
+  - [Literary History as a Model for Architectural Traditionalism](https://dmcpatrimonio.github.io/archlit)
   - [Neoárabe: caminhos da arquitetura árabe no Brasil](https://neoarabe.hcommons.org)
-  - [Regionalismo e crítica](https://github.com/dmcpatrimonio/regionalcrit)
+  - [Regionalismo e crítica](https://dmcpatrimonio.github.io/regionalcrit)
 
 ## Resumo do projeto de pesquisa
 

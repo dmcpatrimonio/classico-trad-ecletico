@@ -1,5 +1,5 @@
 # General {{{1
-title: "Clássico, tradicional, eclético: Arquitetura brasileira no longo século XIX"
+title: "Clássico, tradicional, eclético: nacionalismo e cosmopolitismo na cidade industrial"
 email: palazzo@unb.br
 description: >-
   Discursos arquitetônicos produzidos de c. 1860 a 1930,
@@ -83,7 +83,7 @@ defaults: # {{{2
       itemtype  : "http://schema.org/Thing"
 
 # Build settings {{{1
-remote_theme: p3palazzo/minima-scholar # {{{2
+theme: minima # {{{2
 minima:
   date_format : "%e %B %Y"
   social_links:
@@ -91,10 +91,8 @@ minima:
     github    : https://github.com/dmcpatrimonio/arqtrad
     instagram : https://instagram.com/arqtrad
 header_pages:
-  - membros.md
-  - produtos.md
   - atual.md
-  - pibic21-projeto.md
+  - ppgfau-projeto.md
 
 plugins: # {{{2
   - jekyll-feed
