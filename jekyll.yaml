@@ -1,0 +1,18 @@
+from               : markdown
+to                 : markdown_phpextra+yaml_metadata_block
+fail-if-warnings   : true
+file-scope         : true
+filters:
+- pandoc-crossref
+- citeproc
+metadata:
+  layout           : page
+standalone         : true
+resource-path:
+- .
+- fig
+- assets
+variables:
+  email-obfuscation: references
+  link-citations   : true
+  wrap             : preserve
